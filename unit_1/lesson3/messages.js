@@ -7,3 +7,5 @@ exports.messages = [
 ];
 
 //exports makes this array available to other modules
+//npm  install <dependency> --save
+//npm init -y
