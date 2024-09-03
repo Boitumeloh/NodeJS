@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "cities": "^2.0.0"
+  },
+  "name": "recipe_connection",
+  "version": "1.0.0",
+  "main": "index.js",
+
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Boitumelo",
+  "license": "ISC",
+  "description": "An app to share cooking recipes"
+}
