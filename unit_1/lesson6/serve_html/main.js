@@ -1,10 +1,10 @@
-// "use strict";
+"use strict";
 
-// //Listing 6.2 Page 61 - 62
-// // const port = 3000,
-// //     http = require("http"),
-// //     httpStatus = require("http-status-codes"),
-// //     fs = require("fs");
+// Listing 6.2 Page 61 - 62
+const port = 3000,
+    http = require("http"),
+    httpStatus = require("http-status-codes"),
+    fs = require("fs");
 
 // // const routeMap = {
 // //     "/": "views/index.html" // is a home routing "/"
@@ -59,33 +59,33 @@ const sendErrorResponse = (res) => {
     "Content-Type": "text/html",
   });
   res.write("<h1>File Not Found!</h1>");
-  res.end();
+  res.end();//js file
 };
-http
-  .createServer((req, res) => {
+
+http.createServer((req, res) => {
     let url = req.url;
-    if (url.indexOf(".html") !== -1) {
+    if (url.indexOf(".html") !== -1) {//if the file is not html file
       res.writeHead(httpStatus.OK, {
         "Content-Type": "text/html",
       });
-      customReadFile(`./views${url}`, res);
-    } else if (url.indexOf(".js") !== -1) {
+      customReadFile(`./views${url}`, res);//responds with index.html
+    } else if (url.indexOf(".js") !== -1) {//js file
       res.writeHead(httpStatus.OK, {
         "Content-Type": "text/javascript",
       });
-      customReadFile(`./public/js${url}`, res);
-    } else if (url.indexOf(".css") !== -1) {
+      customReadFile(`./public/js${url}`, res);//test.js
+    } else if (url.indexOf(".css") !== -1) {//css file
       res.writeHead(httpStatus.OK, {
         "Content-Type": "text/css",
       });
-      customReadFile(`./public/css${url}`, res);
-    } else if (url.indexOf(".png") !== -1) {
+      customReadFile(`./public/css${url}`, res);//test css
+    } else if (url.indexOf(".png") !== -1) {//png
       res.writeHead(httpStatus.OK, {
         "Content-Type": "image/png",
       });
-      customReadFile(`./public/images${url}`, res);
+      customReadFile(`./public/images${url}`, res);//test.png
     } else {
-      sendErrorResponse(res);
+      sendErrorResponse(res);//error nessage
     }
   })
   .listen(3000);
