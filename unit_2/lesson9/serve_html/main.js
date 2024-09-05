@@ -1,3 +1,4 @@
+const homeController = require("./controllers/homeController");
 const port = 3000;
 const express = require("express");
 
@@ -22,16 +23,9 @@ app.use(express.json());
 //   res.send("Contact information submitted successfully.");
 // });
 
-app.post("/", (req, res) => {
-  console.log(req.body);
-  console.log(req.query);
-  res.send("POST Successful!");
-});
+app.post("/", homeController.sendPost);
 
-app.get("/items/:vegetable", (req, res) => {
-  let veg = req.params.vegetable;
-  res.send(`This is the page for ${veg}`);
-});
+app.get("/items/:vegetable", homeController.sendReqParam);
 
 app.listen(port, () => {
   console.log(
