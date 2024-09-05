@@ -4,12 +4,13 @@ const express = require("express");
 //initialise express
 const app = express();
 
-app.get("/", (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
-  console.log(req.url);
-  console.log(req.query);
-  res.send("Hello, Universe!");
+app.post("/contact", (req, res) => {
+  res.send("Contact information submitted successfully.");
+});
+
+app.get("/items/:vegetable", (req, res) => {
+  let veg = req.params.vegetable;
+  res.send(`This is the page for ${veg}`);
 });
 
 app.listen(port, () => {
