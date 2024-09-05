@@ -1,11 +1,10 @@
 "use strict";
 
-exports.messages = [
-  "A change of environment can be a good thing!",
-  "You will make it!",
-  "Just run with the code!"
+exports.messages = [//exports makes this array available to other modules
+"you are great!",
+ "You can accomplish anything!",
+ "Success is in your future!"
 ];
 
-//exports makes this array available to other modules
 //npm  install <dependency> --save
 //npm init -y
