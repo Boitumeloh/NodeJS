@@ -1,10 +1,10 @@
 "use strict";
 
-const express = require("express"),
-  app = express(),
-  homeController = require("./controllers/homeController"),
-  errorController = require("./controllers/errorController"),
-  layouts = require("express-ejs-layouts");
+const express = require("express");
+const app = express();
+const homeController = require("./controllers/homeController");
+const errorController = require("./controllers/errorController");
+const layouts = require("express-ejs-layouts");
 
   //requires ejs express layout module
   //sets applicationtouse ejs
