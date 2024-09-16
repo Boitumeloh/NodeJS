@@ -1,16 +1,16 @@
 "use strict";
 
-const express = require("express"),
-  app = express(),
-  router = express.Router(),
-  layouts = require("express-ejs-layouts"),
-  mongoose = require("mongoose"),
-  errorController = require("./controllers/errorController"),
-  homeController = require("./controllers/homeController"),
-  subscribersController = require("./controllers/subscribersController"),
-  usersController = require("./controllers/usersController"),
-  coursesController = require("./controllers/coursesController"),
-  Subscriber = require("./models/subscriber");
+const express = require("express");
+const app = express();
+const router = express.Router();
+const layouts = require("express-ejs-layouts");
+const mongoose = require("mongoose");
+const errorController = require("./controllers/errorController");
+const homeController = require("./controllers/homeController");
+const subscribersController = require("./controllers/subscribersController");
+const usersController = require("./controllers/usersController");
+const coursesController = require("./controllers/coursesController");
+const Subscriber = require("./models/subscriber");
 mongoose.Promise = global.Promise;
 
 mongoose.connect(
