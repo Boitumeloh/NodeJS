@@ -2,6 +2,16 @@
 
 const Course = require("../models/course");
 
+const course = require("../models/course"),
+  getcourseParams = (body) => {
+    return {
+      title: body.title,
+      description: body.description,
+      items: body.items,
+      zipCode: body.zipCode
+    };
+  };
+
 module.exports = {
   index: (req, res, next) => {
     Course.find({})
@@ -22,23 +32,29 @@ module.exports = {
   },
 
   create: (req, res, next) => {
-    let courseParams = {
-      title: req.body.title,
-      description: req.body.description,
-      items: [req.body.items.split(",")],
-      zipCode: req.body.zipCode
-    };
-    Course.create(courseParams)
-      .then(course => {
+    let courseParams = getcourseParams(req.body);
+    course
+      .create(courseParams)
+      .then((course) => {
+        req.flash(
+          "success",
+          `${course.title}'s account created successfully!`
+        );
         res.locals.redirect = "/courses";
         res.locals.course = course;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error saving course: ${error.message}`);
-        next(error);
+        res.locals.redirect = "/courses/new";
+        req.flash(
+          "error",
+          `Failed to create course account because: ${error.message}.`
+        );
+        next();
       });
   },
+
 
   show: (req, res, next) => {
     let courseId = req.params.id;
