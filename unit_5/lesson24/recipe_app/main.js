@@ -21,11 +21,17 @@ const connectFlash = require("connect-flash");
 //importing express validator
 const expressValidator = require("express-validator");
 
-//importing passport parkage
+//importing passport module
 const passport = require("passport");
 
 //importing the user model
 const User = require("./models/user");
+
+//configuring the users login strategy
+passport.use(User.createStrategy());
+//setting up passport to serialize and deserialize our user data
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 mongoose.Promise = global.Promise;
 
@@ -75,30 +81,24 @@ router.use(
   })
 );
 
-//initialize passport
+//initializing passport
 router.use(passport.initialize());
-
-// Configure passport to use sessions in Express.js.
+//configure passport to use sessions in express.js
 router.use(passport.session());
-
-//setting up the passport serializing
-//confugure the user login strategy
-passport.use(User.createStrategy());
-
-//setting up passport to serialize and deserialize user
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 //Configure your application to use connect-flash as middleware.
 router.use(connectFlash());
 
 //Assign flash messages to the local flashMessages variable on the response object.
 router.use((req, res, next) => {
+  //setting up logged in variable to reflect passport login status
   res.locals.loggedIn = req.isAuthenticated();
+  //set up current user to reflect loggedin user
   res.locals.currentUser = req.user;
   res.locals.flashMessages = req.flash();
   next();
 });
+
 router.use(expressValidator());
 
 router.use(homeController.logRequestPaths);
@@ -113,9 +113,16 @@ router.get("/users/new", usersController.new);
 //   usersController.create,
 //   usersController.redirectView
 // );
-router.post("/users/create", usersController.validate, usersController.create, usersController.redirectView);
+router.post(
+  "/users/create",
+  usersController.validate,
+  usersController.create,
+  usersController.redirectView
+);
+router.get("/users/login", usersController.login);
 router.get("/users/login", usersController.login);
 router.post("/users/login", usersController.authenticate, usersController.redirectView);
+router.get("/users/logout", usersController.logout, usersController.redirectView);
 router.get("/users/:id/edit", usersController.edit);
 router.put(
   "/users/:id/update",
