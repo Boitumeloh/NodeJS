@@ -1,61 +1,84 @@
 "use strict";
 
-const Subscriber = require("../models/subscriber"),
-  getSubscriberParams = body => {
+const Subscriber = require("../models/subscriber");
+
+const subscriber = require("../models/subscriber"),
+  getsubscriberParams = (body) => {
     return {
       name: body.name,
       email: body.email,
-      zipCode: parseInt(body.zipCode)
+      zipCode: body.zipCode,
     };
   };
 
 module.exports = {
   index: (req, res, next) => {
-    Subscriber.find()
-      .then(subscribers => {
+    Subscriber.find({})
+      .then((subscribers) => {
         res.locals.subscribers = subscribers;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error fetching subscribers: ${error.message}`);
         next(error);
       });
   },
+
   indexView: (req, res) => {
     res.render("subscribers/index");
   },
 
+  saveSubscriber: (req, res) => {
+    let newSubscriber = new Subscriber({
+      name: req.body.name,
+      email: req.body.email,
+      zipCode: req.body.zipCode,
+    });
+    newSubscriber
+      .save()
+      .then((result) => {
+        res.render("thanks");
+      })
+      .catch((error) => {
+        if (error) res.send(error);
+      });
+  },
   new: (req, res) => {
     res.render("subscribers/new");
   },
 
   create: (req, res, next) => {
-    let subscriberParams = getSubscriberParams(req.body);
-    Subscriber.create(subscriberParams)
-      .then(subscriber => {
+    let subscriberParams = getsubscriberParams(req.body);
+    subscriber
+      .create(subscriberParams)
+      .then((subscriber) => {
+        req.flash(
+          "success",
+          `${subscriber.name}'s account created successfully!`
+        );
         res.locals.redirect = "/subscribers";
         res.locals.subscriber = subscriber;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error saving subscriber: ${error.message}`);
-        next(error);
+        res.locals.redirect = "/subscribers/new";
+        req.flash(
+          "error",
+          `Failed to create subscriber account because: ${error.message}.`
+        );
+        next();
       });
   },
 
-  redirectView: (req, res, next) => {
-    let redirectPath = res.locals.redirect;
-    if (redirectPath !== undefined) res.redirect(redirectPath);
-    else next();
-  },
   show: (req, res, next) => {
     let subscriberId = req.params.id;
     Subscriber.findById(subscriberId)
-      .then(subscriber => {
+      .then((subscriber) => {
         res.locals.subscriber = subscriber;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error fetching subscriber by ID: ${error.message}`);
         next(error);
       });
@@ -68,12 +91,12 @@ module.exports = {
   edit: (req, res, next) => {
     let subscriberId = req.params.id;
     Subscriber.findById(subscriberId)
-      .then(subscriber => {
+      .then((subscriber) => {
         res.render("subscribers/edit", {
-          subscriber: subscriber
+          subscriber: subscriber,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error fetching subscriber by ID: ${error.message}`);
         next(error);
       });
@@ -81,17 +104,21 @@ module.exports = {
 
   update: (req, res, next) => {
     let subscriberId = req.params.id,
-      subscriberParams = getSubscriberParams(req.body);
+      subscriberParams = {
+        name: req.body.name,
+        email: req.body.email,
+        zipCode: req.body.zipCode,
+      };
 
     Subscriber.findByIdAndUpdate(subscriberId, {
-      $set: subscriberParams
+      $set: subscriberParams,
     })
-      .then(subscriber => {
+      .then((subscriber) => {
         res.locals.redirect = `/subscribers/${subscriberId}`;
         res.locals.subscriber = subscriber;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error updating subscriber by ID: ${error.message}`);
         next(error);
       });
@@ -104,9 +131,15 @@ module.exports = {
         res.locals.redirect = "/subscribers";
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error deleting subscriber by ID: ${error.message}`);
         next();
       });
-  }
+  },
+
+  redirectView: (req, res, next) => {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
+  },
 };

@@ -1,18 +1,20 @@
 "use strict";
 
-const Course = require("../models/course"),
-  getCourseParams = body => {
+const Course = require("../models/course");
+
+const course = require("../models/course"),
+  getcourseParams = (body) => {
     return {
       title: body.title,
       description: body.description,
-      maxStudents: body.maxStudents,
-      cost: body.cost
+      items: body.items,
+      zipCode: body.zipCode
     };
   };
 
 module.exports = {
   index: (req, res, next) => {
-    Course.find()
+    Course.find({})
       .then(courses => {
         res.locals.courses = courses;
         next();
@@ -25,30 +27,34 @@ module.exports = {
   indexView: (req, res) => {
     res.render("courses/index");
   },
-
   new: (req, res) => {
     res.render("courses/new");
   },
 
   create: (req, res, next) => {
-    let courseParams = getCourseParams(req.body);
-    Course.create(courseParams)
-      .then(course => {
+    let courseParams = getcourseParams(req.body);
+    course
+      .create(courseParams)
+      .then((course) => {
+        req.flash(
+          "success",
+          `${course.title}'s account created successfully!`
+        );
         res.locals.redirect = "/courses";
         res.locals.course = course;
         next();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(`Error saving course: ${error.message}`);
-        next(error);
+        res.locals.redirect = "/courses/new";
+        req.flash(
+          "error",
+          `Failed to create course account because: ${error.message}.`
+        );
+        next();
       });
   },
 
-  redirectView: (req, res, next) => {
-    let redirectPath = res.locals.redirect;
-    if (redirectPath !== undefined) res.redirect(redirectPath);
-    else next();
-  },
 
   show: (req, res, next) => {
     let courseId = req.params.id;
@@ -83,7 +89,12 @@ module.exports = {
 
   update: (req, res, next) => {
     let courseId = req.params.id,
-      courseParams = getCourseParams(req.body);
+      courseParams = {
+        title: req.body.title,
+        description: req.body.description,
+        items: [req.body.items.split(",")],
+        zipCode: req.body.zipCode
+      };
 
     Course.findByIdAndUpdate(courseId, {
       $set: courseParams
@@ -110,5 +121,11 @@ module.exports = {
         console.log(`Error deleting course by ID: ${error.message}`);
         next();
       });
+  },
+
+  redirectView: (req, res, next) => {
+    let redirectPath = res.locals.redirect;
+    if (redirectPath !== undefined) res.redirect(redirectPath);
+    else next();
   }
 };
