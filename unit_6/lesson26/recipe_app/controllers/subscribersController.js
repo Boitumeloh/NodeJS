@@ -37,7 +37,6 @@ module.exports = {
   new: (req, res) => {
     res.render("subscribers/new");
   },
-
   create: (req, res, next) => {
     let subscriberParams = {
       name: req.body.name,
@@ -55,7 +54,6 @@ module.exports = {
         next(error);
       });
   },
-
   show: (req, res, next) => {
     let subscriberId = req.params.id;
     Subscriber.findById(subscriberId)
@@ -68,11 +66,9 @@ module.exports = {
         next(error);
       });
   },
-
   showView: (req, res) => {
     res.render("subscribers/show");
   },
-
   edit: (req, res, next) => {
     let subscriberId = req.params.id;
     Subscriber.findById(subscriberId)
@@ -86,7 +82,6 @@ module.exports = {
         next(error);
       });
   },
-
   update: (req, res, next) => {
     let subscriberId = req.params.id,
       subscriberParams = {
@@ -108,7 +103,6 @@ module.exports = {
         next(error);
       });
   },
-
   delete: (req, res, next) => {
     let subscriberId = req.params.id;
     Subscriber.findByIdAndRemove(subscriberId)
@@ -121,7 +115,6 @@ module.exports = {
         next();
       });
   },
-
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);
