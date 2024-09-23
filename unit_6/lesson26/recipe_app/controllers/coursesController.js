@@ -15,11 +15,16 @@ module.exports = {
       });
   },
   indexView: (req, res) => {
-    res.render("courses/index");
+    if (req.query.format === "json"){
+    res.json(res.locals.courses);
+    }else{
+      res.render("courses/index");
+    }
   },
   new: (req, res) => {
     res.render("courses/new");
   },
+
   create: (req, res, next) => {
     let courseParams = {
       title: req.body.title,
@@ -38,6 +43,7 @@ module.exports = {
         next(error);
       });
   },
+
   show: (req, res, next) => {
     let courseId = req.params.id;
     Course.findById(courseId)
@@ -50,9 +56,11 @@ module.exports = {
         next(error);
       });
   },
+
   showView: (req, res) => {
     res.render("courses/show");
   },
+
   edit: (req, res, next) => {
     let courseId = req.params.id;
     Course.findById(courseId)
@@ -66,6 +74,7 @@ module.exports = {
         next(error);
       });
   },
+
   update: (req, res, next) => {
     let courseId = req.params.id,
       courseParams = {
@@ -88,6 +97,7 @@ module.exports = {
         next(error);
       });
   },
+
   delete: (req, res, next) => {
     let courseId = req.params.id;
     Course.findByIdAndRemove(courseId)
@@ -100,6 +110,7 @@ module.exports = {
         next();
       });
   },
+
   redirectView: (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath !== undefined) res.redirect(redirectPath);
