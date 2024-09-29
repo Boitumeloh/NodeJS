@@ -1,6 +1,9 @@
 "use strict";
 
 const Course = require("../models/course");
+const User = require("../models/user");
+const httpStatus = require("http-status-codes");
+//const User = require("../models/user");
 
 const course = require("../models/course"),
   getcourseParams = (body) => {
@@ -159,6 +162,27 @@ module.exports = {
       next();
     } else {
       next();
+    }
+  },
+
+  join: (req, res, next) => {
+    let courseId = req.params.id,
+      currentUser = req.user;
+    if (currentUser) {
+      User.findByIdAndUpdate(currentUser, {
+        $addToSet: {
+          courses: courseId,
+        },
+      })
+        .then(() => {
+          res.locals.success = true;
+          next();
+        })
+        .catch((error) => {
+          next(error);
+        });
+    } else {
+      next(new Error("User must log in."));
     }
   },
 };

@@ -3,15 +3,10 @@
 const express = require("express");
 const layouts = require("express-ejs-layouts");
 const app = express();
-// const router = express.Router();
-const homeController = require("./controllers/homeController");
-const errorController = require("./controllers/errorController");
-// const subscribersController = require("./controllers/subscribersController.js");
-// const usersController = require("./controllers/usersController.js");
-// const coursesController = require("./controllers/coursesController.js");
+//const router = express.Router();
+const router = require("./routes/index");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
-const router = require("./routes/index");
 
 //for hashing and authentication
 const passport = require("passport");
@@ -23,6 +18,7 @@ const connectFlash = require("connect-flash");
 
 const expressValidator = require("express-validator");
 
+
 mongoose.connect("mongodb://0.0.0.0:27017/confetti_cuisine", {
   useNewUrlParser: true,
 });
@@ -31,26 +27,26 @@ mongoose.set("useCreateIndex", true);
 app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
 
-router.use(
+app.use(
   methodOverride("_method", {
     methods: ["POST", "GET"],
   })
 );
 
-router.use(layouts);
-router.use(express.static("public"));
-router.use(expressValidator());
+app.use(layouts);
+app.use(express.static("public"));
+app.use(expressValidator());
 
-router.use(
+app.use(
   express.urlencoded({
     extended: false,
   })
 );
-router.use(express.json());
+app.use(express.json());
 
 //configuring cookieParser with a secret key
-router.use(cookieParser("secretCuisine123"));
-router.use(
+app.use(cookieParser("secretCuisine123"));
+app.use(
   expressSession({
     secret: "secretCuisine123",
     cookie: {
@@ -60,30 +56,26 @@ router.use(
     saveUninitialized: false,
   })
 );
-router.use(connectFlash());
+app.use(connectFlash());
 
 //configuring express.js to use sessions
 //configuring express.js to initialize and use passport
-router.use(passport.initialize());
+app.use(passport.initialize());
 //instructing passport to use sessions
-router.use(passport.session());
+app.use(passport.session());
 //setting up the default login strategy
 passport.use(User.createStrategy());
 //setting up passport to compact , encrypt and decrypt user data
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-router.use((req, res, next) => {
+app.use((req, res, next) => {
   res.locals.loggedIn = req.isAuthenticated();
   res.locals.currentUser = req.user;
   //assign flash messgaes to a local variable
   res.locals.flashMessages = req.flash();
   next();
 });
-
-router.get("/", homeController.index);
-router.use(errorController.pageNotFoundError);
-router.use(errorController.internalServerError);
 
 app.use("/", router);
 
