@@ -5,6 +5,7 @@ const httpStatus = require("http-status-codes");
 const app = http.createServer();
 
 const getJSONString = (obj) => {
+  
   return JSON.stringify(obj, null, 2);
 };
 

@@ -144,6 +144,7 @@ router.delete(
   subscribersController.redirectView
 );
 
+
 router.get("/courses", coursesController.index, coursesController.indexView);
 router.get("/courses/new", coursesController.new);
 router.post(

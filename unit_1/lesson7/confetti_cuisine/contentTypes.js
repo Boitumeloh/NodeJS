@@ -10,6 +10,7 @@ module.exports = {//exporting content type mapping object
   },
   jpg: {
     "Content-Type": "image/jpg",
+    
   },
   png: {
     "Content-Type": "image/png",

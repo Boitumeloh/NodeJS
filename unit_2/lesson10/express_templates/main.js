@@ -9,6 +9,7 @@ app.set("port", process.env.PORT || 3000);
 app.set("view engine", "ejs");
 
 app.use(layouts);
+
 app.use(
   express.urlencoded({
     extended: false

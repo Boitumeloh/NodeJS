@@ -10,6 +10,7 @@ const layouts = require("express-ejs-layouts");
   //sets applicationtouse ejs
 app.set("view engine", "ejs");
 
+
 //parses route into JSON object
 app.set("port", process.env.PORT || 3000);
 app.use(

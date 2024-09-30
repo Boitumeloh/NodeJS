@@ -11,7 +11,8 @@ app.set("view engine", "ejs");
 
 app.use(layouts);
 app.use(
-  express.urlencoded({
+  express.urlencoded(
+    {
     extended: false,
   })
 );

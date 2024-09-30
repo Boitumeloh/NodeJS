@@ -7,6 +7,7 @@ const express = require("express"),
   subscribersController = require("./controllers/subscribersController"),
   layouts = require("express-ejs-layouts"),
   mongoose = require("mongoose"),
+  
   Subscriber = require("./models/subscriber");
 
 mongoose.Promise = global.Promise;

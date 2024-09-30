@@ -6,6 +6,7 @@ const errorController = require("./controllers/errorController");
 const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
+
 const Subscriber = require("./models/subscriber");
 
 //connecting to database
