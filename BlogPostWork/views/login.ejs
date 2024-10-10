@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('layouts/header'); -%>
+
+    <body>
+        <%- include('layouts/navbar'); -%>
+            <!-- Page Header-->
+            <header class="masthead" style="background-image: url('/assets/img/contact-bg.jpg')">
+                <div class="container position-relative px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            <div class="page-heading">
+                                <h1>Login</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <!-- Main Content-->
+            <main class="mb-4">
+                <div class="container px-4 px-lg-5">
+                  <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                      <div class="my-5">
+                        
+                        <!-- Display login error if it exists -->
+                        <% if (typeof loginError !== 'undefined' && loginError.length > 0) { %>
+                          <div class="alert alert-danger">
+                            <%= loginError %>
+                          </div>
+                        <% } %>
+          
+                        <form action="/users/login" method="POST">
+                          <div class="form-floating mb-3">
+                            <input
+                              class="form-control"
+                              id="username"
+                              name="username"
+                              type="text"
+                              placeholder="Enter your username"
+                              value="<%= (typeof data !== 'undefined' ? data.username : '') %>"
+                            />
+                            <label for="username">User Name</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input
+                              class="form-control"
+                              id="password"
+                              name="password"
+                              type="password"
+                              placeholder="Enter your password"
+                            />
+                            <label for="password">Password</label>
+                          </div>
+          
+                          <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
+                     
+            <%- include('layouts/footer'); -%>
+                <%- include('layouts/scripts'); -%>
+    </body>
+
+</html>
